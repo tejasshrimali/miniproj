@@ -121,7 +121,7 @@ export default function App() {
         }
       `}</style>
       <div className="modern-uploader-box">
-        <h2>Exam Notification</h2>
+        <h2>Exam </h2>
         <input type="file" accept=".csv,text/csv" onChange={handleFileChange} />
         <button onClick={sendData} disabled={!rows.length}>
           Send to webhook
