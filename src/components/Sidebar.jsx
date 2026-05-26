@@ -16,7 +16,9 @@ const Sidebar = () => {
 
   return (
     <aside className="w-64 bg-gray-800 text-white min-h-screen p-4">
-      <h1 className="text-2xl font-bold mb-8">Smart Exam</h1>
+      <h1 className="text-2xl font-bold mb-8">
+        Smart Exam Notification System
+      </h1>
       <ul className="space-y-2">
         {menuItems.map((item) => (
           <li key={item.path}>

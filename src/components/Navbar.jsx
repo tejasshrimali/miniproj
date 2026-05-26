@@ -19,7 +19,9 @@ const Navbar = () => {
 
   return (
     <nav className="bg-white shadow-md px-6 py-4 flex justify-between items-center">
-      <h2 className="text-lg font-bold text-gray-800">Smart Exam System</h2>
+      <h2 className="text-lg font-bold text-gray-800">
+        Smart Exam Notification System{" "}
+      </h2>
       <div className="flex items-center space-x-4">
         <span className="text-gray-600 text-sm">{user?.email}</span>
         <button

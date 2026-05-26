@@ -20,26 +20,30 @@ const Dashboard = () => {
     try {
       // Fetch total students
       const { count: studentCount } = await supabase
-        .from('students')
-        .select('*', { count: 'exact', head: true });
+        .from("students")
+        .select("*", { count: "exact", head: true });
 
       // Fetch total exams
       const { count: examCount } = await supabase
-        .from('exam_arrangements')
-        .select('*', { count: 'exact', head: true });
+        .from("exam_arrangements")
+        .select("*", { count: "exact", head: true });
 
       // Fetch notifications status
       const { data: matchedData } = await supabase
-        .from('matched_students')
-        .select('notification_status');
+        .from("matched_students")
+        .select("notification_status");
 
       let sent = 0;
       let pending = 0;
 
       if (matchedData) {
-        matchedData.forEach(match => {
-          if (match.notification_status === 'sent') sent++;
-          else if (match.notification_status === 'pending' || !match.notification_status) pending++;
+        matchedData.forEach((match) => {
+          if (match.notification_status === "sent") sent++;
+          else if (
+            match.notification_status === "pending" ||
+            !match.notification_status
+          )
+            pending++;
         });
       }
 
@@ -104,16 +108,26 @@ const Dashboard = () => {
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <div className="bg-white rounded-lg shadow p-6">
                 <h3 className="text-lg font-bold text-gray-800 mb-4">
-                  Welcome to Smart Exam Notification System
+                  Welcome to Smart Exam Notification System Notification
+                  Notification System
                 </h3>
                 <p className="text-gray-600 mb-4">
-                  This system automates the process of mapping exam seat ranges to students
-                  and sending them personalized notifications via Pabbly Webhooks.
+                  This system automates the process of mapping exam seat ranges
+                  to students and sending them personalized notifications via
+                  Pabbly Webhooks.
                 </p>
                 <ul className="list-disc list-inside text-sm text-gray-600 space-y-2">
-                  <li>Manage your student database in the <strong>Students</strong> section.</li>
-                  <li>Create seating maps in the <strong>Arrangements</strong> section.</li>
-                  <li>Auto-match students and trigger notifications with ease.</li>
+                  <li>
+                    Manage your student database in the{" "}
+                    <strong>Students</strong> section.
+                  </li>
+                  <li>
+                    Create seating maps in the <strong>Arrangements</strong>{" "}
+                    section.
+                  </li>
+                  <li>
+                    Auto-match students and trigger notifications with ease.
+                  </li>
                 </ul>
               </div>
 
@@ -128,7 +142,9 @@ const Dashboard = () => {
                   </div>
                   <div className="flex justify-between items-center border-b pb-2">
                     <span className="text-gray-600">Pabbly Webhook</span>
-                    <span className="text-green-500 font-bold">● Configured</span>
+                    <span className="text-green-500 font-bold">
+                      ● Configured
+                    </span>
                   </div>
                   <div className="flex justify-between items-center pb-2">
                     <span className="text-gray-600">Authentication</span>
