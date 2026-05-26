@@ -25,11 +25,11 @@ const Students = () => {
         .order("created_at", { ascending: false });
 
       if (error) throw error;
-      
+
       // Map DB snake_case to camelCase for frontend components
-      const formattedData = data.map(s => ({
+      const formattedData = data.map((s) => ({
         ...s,
-        rollNumber: s.roll_number
+        rollNumber: s.roll_number,
       }));
       setStudents(formattedData);
     } catch (error) {
@@ -48,7 +48,7 @@ const Students = () => {
         roll_number: student.rollNumber,
         branch: student.branch,
         year: student.year,
-        division: student.division
+        division: student.division,
       };
 
       if (editingStudent) {
@@ -56,18 +56,16 @@ const Students = () => {
           .from("students")
           .update(dbStudent)
           .eq("id", editingStudent.id);
-        
+
         if (error) throw error;
         toast.success("Student updated successfully");
       } else {
-        const { error } = await supabase
-          .from("students")
-          .insert([dbStudent]);
-        
+        const { error } = await supabase.from("students").insert([dbStudent]);
+
         if (error) throw error;
         toast.success("Student added successfully");
       }
-      
+
       setShowForm(false);
       setEditingStudent(null);
       fetchStudents();
@@ -78,11 +76,8 @@ const Students = () => {
 
   const handleDeleteStudent = async (id) => {
     try {
-      const { error } = await supabase
-        .from("students")
-        .delete()
-        .eq("id", id);
-      
+      const { error } = await supabase.from("students").delete().eq("id", id);
+
       if (error) throw error;
       toast.success("Student deleted");
       fetchStudents();
@@ -98,25 +93,51 @@ const Students = () => {
 
   const handleExcelUpload = async (importedStudents) => {
     try {
-      const dbStudents = importedStudents.map(s => ({
+      const dbStudents = importedStudents.map((s) => ({
         name: s.name,
         email: s.email,
         phone: s.phone,
         roll_number: s.rollNumber,
         branch: s.branch,
-        year: s.year
+        year: s.year,
       }));
 
-      const { error } = await supabase
-        .from("students")
-        .insert(dbStudents);
-      
+      const { error } = await supabase.from("students").insert(dbStudents);
+
       if (error) throw error;
-      toast.success(`${importedStudents.length} students imported successfully`);
+      toast.success(
+        `${importedStudents.length} students imported successfully`,
+      );
       fetchStudents();
     } catch (error) {
       toast.error("Error importing students: " + error.message);
     }
+  };
+
+  const getGroupedAndSortedStudents = () => {
+    // Group students by branch
+    const grouped = students.reduce((acc, student) => {
+      const branch = student.branch || "Unknown";
+      if (!acc[branch]) {
+        acc[branch] = [];
+      }
+      acc[branch].push(student);
+      return acc;
+    }, {});
+
+    // Sort each group by roll number and sort branches alphabetically
+    const sorted = {};
+    Object.keys(grouped)
+      .sort()
+      .forEach((branch) => {
+        sorted[branch] = grouped[branch].sort((a, b) => {
+          const rollA = String(a.rollNumber || "").toLowerCase();
+          const rollB = String(b.rollNumber || "").toLowerCase();
+          return rollA.localeCompare(rollB, undefined, { numeric: true });
+        });
+      });
+
+    return sorted;
   };
 
   return (
@@ -154,7 +175,7 @@ const Students = () => {
               <div className="text-center py-10">Loading students...</div>
             ) : (
               <StudentTable
-                students={students}
+                groupedStudents={getGroupedAndSortedStudents()}
                 onDelete={handleDeleteStudent}
                 onEdit={handleEditStudent}
               />
